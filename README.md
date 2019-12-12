@@ -33,8 +33,8 @@ The installation is complete and now you can move on to the demonstration steps.
 
 3. With all configurations in place, try to get the protected tasks from **task api** using the `password` grant type:
 
-        $ docker-compose exec consumer php artisan tasks:get --grant-type=password
+        $ docker-compose exec consumer php artisan tasks:get --grant=password
 
 4. The **consumer** app will get the protected tasks from **task api** using the `client_credentials` grant type:
 
-        $ docker-compose exec consumer php artisan tasks:get --grant-type=client_credentials
+        $ docker-compose exec consumer php artisan tasks:get --grant=client_credentials
