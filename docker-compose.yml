@@ -1,0 +1,29 @@
+version: '3.7'
+
+networks:
+  backend:
+
+services:
+  api:
+    build: ./
+    command: ../start.sh 8000
+    working_dir: /opt/api
+    volumes:
+      - ./start.sh:/opt/start.sh
+      - ./API:/opt/api
+    ports:
+      - '8000:8000'
+    networks:
+      - backend
+        
+  consumer:
+    build: ./
+    command: ../start.sh 8001
+    working_dir: /opt/consumer
+    volumes:
+      - ./start.sh:/opt/start.sh
+      - ./Consumer:/opt/consumer
+    ports:
+      - '8001:8001'
+    networks:
+      - backend
