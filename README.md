@@ -48,8 +48,29 @@ The installation is complete and now you can move on to the demonstration steps.
 
 6. As said before, you can create OAuth clients using the web interface, so let's do this:
 
-        Access the api app web interface (http://localhost:8000/) to make the login using these credentials (johndoe@example.com/password)
-        Follow the steps show in images below
+    * Access the [api app web interface](http://localhost:8000/) to make the login using these credentials (`johndoe@example.com`/`password`)
+    * Follow the steps show in images below:
 
 ![List of clients](./API/resources/images/client_list.png?raw=true)
 ![Register a client](./API/resources/images/client_details.png?raw=true)
+
+7. Customize again the `.env` file of the **consumer app** with the credentials created:
+
+        OAUTH_GRANT_AUTHORIZATION_CODE_CLIENT_ID=
+        OAUTH_GRANT_AUTHORIZATION_CODE_CLIENT_SECRET=
+
+8. Now try to access the consumer app to get tasks without authorization: http://localhost:8001/tasks:
+
+    You will probably see nothing because the consumer was not authorized yet, so let's authorize it.
+
+9. Access http://localhost:8001/ and you will be redirected to authenticate and then authorize the **consumer app**:
+
+![List of clients](./API/resources/images/asking_for_authorization.png?raw=true)
+
+10. Once authorized you will be redirected again to http://localhost:8001/tasks now with the **tasks retrieved from api**.
+
+## References
+
+    * [Laravel Passport documentation](https://laravel.com/docs/master/passport)
+    * [Tutorial about Passport](https://scotch.io/@neo/getting-started-with-laravel-passport)
+    * [Tutorial about Passport](https://blog.pusher.com/make-an-oauth2-server-using-laravel-passport/)
