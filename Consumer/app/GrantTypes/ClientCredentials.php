@@ -8,7 +8,7 @@ class ClientCredentials extends GrantType
     /**
      * @inheritDoc
      */
-    public function getToken(): string
+    public function getToken(string $code = null): string
     {
         $response = $this->httpClient->post($this->tokenUrl, [
             'form_params' => [

@@ -7,6 +7,10 @@ use GuzzleHttp\Client;
 abstract class GrantType
 {
 
+    const GRANT_PASSWORD = 'password';
+    const GRANT_CLIENT_CREDENTIALS = 'client_credentials';
+    const GRANT_AUTHORIZATION_CODE = 'authorization_code';
+
     /**
      * @var Client
      */
@@ -41,6 +45,6 @@ abstract class GrantType
      *
      * @return string
      */
-    abstract public function getToken(): string;
+    abstract public function getToken(string $code = null): string;
 
 }
