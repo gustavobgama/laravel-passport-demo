@@ -23,7 +23,7 @@ The installation is complete and now you can move on to the demonstration steps.
 
         $ docker-compose exec consumer php artisan tasks:get --grant=password
 
-    Probably you got an authentication error, because you are not configured the OAuth clients yet, so let's move to the next step.
+    Probably you got an authentication error, because you didn't configure the OAuth clients yet, so let's move to the next step.
 
 2. Create two OAuth clients in **API app** (using the command line, later you will create it using the web interface):
 
