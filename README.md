@@ -71,6 +71,6 @@ The installation is complete and now you can move on to the demonstration steps.
 
 ## References
 
-    * [Laravel Passport documentation](https://laravel.com/docs/master/passport)
-    * [Tutorial about Passport](https://scotch.io/@neo/getting-started-with-laravel-passport)
-    * [Tutorial about Passport](https://blog.pusher.com/make-an-oauth2-server-using-laravel-passport/)
+* [Laravel Passport documentation](https://laravel.com/docs/master/passport)
+* [Tutorial about Passport](https://scotch.io/@neo/getting-started-with-laravel-passport)
+* [Tutorial about Passport](https://blog.pusher.com/make-an-oauth2-server-using-laravel-passport/)
