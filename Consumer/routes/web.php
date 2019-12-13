@@ -11,39 +11,35 @@
 |
 */
 
+use App\GrantTypes\GrantType;
+use GuzzleHttp\Client;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     $query = http_build_query([
-        'client_id' => 4,
-        'redirect_uri' => 'http://localhost:8001/callback',
+        'client_id' => config('oauth.grant_authorization_code.client_id'),
+        'redirect_uri' => config('oauth.grant_authorization_code.redirect_uri'),
         'response_type' => 'code',
         'scope' => ''
     ]);
+    $authorizeUrl = config('oauth.authorize_url');
 
-    return redirect("http://localhost:8000/oauth/authorize?{$query}");
+    return redirect("{$authorizeUrl}?{$query}");
 });
 
 Route::get('/callback', function (Request $request) {
-    $response = (new GuzzleHttp\Client)->post('http://localhost:8000/oauth/token', [
-        'form_params' => [
-            'grant_type' => 'authorization_code',
-            'client_id' => 4,
-            'client_secret' => 'm7X7tHreA5kEBg8XoqGFRpEC8xdbbpojQllwHgEd',
-            'redirect_uri' => 'http://localhost:8001/callback',
-            'code' => $request->code,
-        ]
-    ]);
-    
-    session()->put('token', json_decode((string) $response->getBody(), true));
+    $grantType = GrantType::GRANT_AUTHORIZATION_CODE;
+    $grant = resolve(GrantType::class, [$grantType]);
+    session()->put('token', $grant->getToken($request->code));
 
     return redirect('/tasks');
 });
 
 Route::get('/tasks', function () {
-    $response = (new GuzzleHttp\Client)->get('http://localhost:8000/api/tasks', [
+    $response = (new Client)->get(config('oauth.grant_authorization_code.api_url'), [
         'headers' => [
-            'Authorization' => 'Bearer '.session()->get('token.access_token')
+            'Authorization' => 'Bearer '.session()->get('token')
         ]
     ]);
 
