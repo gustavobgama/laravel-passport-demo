@@ -70,7 +70,7 @@ This flow is the most complex of all, the next ones are simpler and involves few
         OAUTH_GRANT_PASSWORD_CLIENT_ID=
         OAUTH_GRANT_PASSWORD_CLIENT_SECRET=
 
-4. With all configurations in place, now you can get the protected resource (tasks) from **API app** executing the same command of the first step:
+4. With all configurations in place, now you can get the protected resource (tasks) from **API app** executing the same command of the first step :tada:
 
         $ docker-compose exec consumer php artisan tasks:get --grant=password
 
@@ -93,7 +93,7 @@ Pretty much similar to the `Resource owner password credentials flow`, the steps
         OAUTH_GRANT_CLIENT_CREDENTIALS_CLIENT_ID=
         OAUTH_GRANT_CLIENT_CREDENTIALS_CLIENT_SECRET=
 
-4. With all configurations in place, now you can get the protected resource (tasks) from **API app** executing the same command of the first step:
+4. With all configurations in place, now you can get the protected resource (tasks) from **API app** executing the same command of the first step :tada:
 
         $ docker-compose exec consumer php artisan tasks:get --grant=client_credentials
 
