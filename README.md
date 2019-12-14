@@ -1,6 +1,6 @@
 ## Description
 
-This repository is a tutorial to demonstrate the three types of authentication available for the laravel implementation of OAuth2, called [Laravel Passport](https://laravel.com/docs/master/passport). There are two simple laravel applications inside it, one is called **API** (containing the tasks resource to be accessed and protected) and the other called **Consumer** (the app that want to access the tasks).
+This repository is a tutorial to demonstrate how [Laravel Passport](https://laravel.com/docs/master/passport) implements the four authorization flows defined by the [OAuth2 RFC](https://tools.ietf.org/html/rfc6749). There are two simple laravel applications inside it, one is called **API** (containing the tasks protected resource to be accessed) and the other called **Consumer** (the app that wants to access the tasks).
 
 ## Installation
 
@@ -19,58 +19,91 @@ The installation is complete and now you can move on to the demonstration steps.
 
 ## Demonstration
 
-1. Using the comsumer, try to access the **protected resource** (tasks) of API:
+### Authorization code flow
 
-        $ docker-compose exec consumer php artisan tasks:get --grant=password
+1. First try to access the resource without being authorized, accessing the **consumer** route: http://localhost:8001/tasks
 
-    Probably you got an authentication error, because you didn't configure the OAuth clients yet, so let's move to the next step.
+    You will probably get an `authorization error`, so let's create an OAuth client in API app and configure the consumer app.
 
-2. Create two OAuth clients in **API app** (using the command line, later you will create it using the web interface):
+2. You can create the OAuth client using both `command line` and `web interface`.
 
-        $ docker-compose exec api php artisan passport:client --password --no-interaction
-        $ docker-compose exec api php artisan passport:client --client --no-interaction
+    With command line you can create the OAuth client (you have to answer some questions interactively):
 
-3. Customize the `.env` file of the **consumer app** with the credentials created:
+        $ docker-compose exec api php artisan passport:client
 
-        OAUTH_GRANT_PASSWORD_CLIENT_ID=
-        OAUTH_GRANT_PASSWORD_CLIENT_SECRET=
-
-        OAUTH_GRANT_CLIENT_CREDENTIALS_CLIENT_ID=
-        OAUTH_GRANT_CLIENT_CREDENTIALS_CLIENT_SECRET=
-
-4. With all configurations in place, now you can get the protected resource (tasks) from **API app** using the `password` grant type:
-
-        $ docker-compose exec consumer php artisan tasks:get --grant=password
-
-5. You can also get the same resource using other grant type like `client_credentials`:
-
-        $ docker-compose exec consumer php artisan tasks:get --grant=client_credentials
-
-6. As said before, you can create OAuth clients using the web interface, so let's do this:
-
-    * Access the [api app web interface](http://localhost:8000/) to make the login using these credentials (`johndoe@example.com`/`password`)
-    * Follow the steps show in images below:
+    Or you can use the web interface, doing you login here http://localhost:8000/ using these credentials (`johndoe@example.com`/`password`). Then following the steps in the images below: 
 
 ![List of clients](./API/resources/images/client_list.png?raw=true)
 ![Register a client](./API/resources/images/client_details.png?raw=true)
 
-7. Customize again the `.env` file of the **consumer app** with the credentials created:
+3. Now you must configure the `.env` file of **consumer app** with `client_id` and `client_secret` generated in the last step:
 
         OAUTH_GRANT_AUTHORIZATION_CODE_CLIENT_ID=
         OAUTH_GRANT_AUTHORIZATION_CODE_CLIENT_SECRET=
 
-8. Now try to access the consumer app to get tasks without authorization: http://localhost:8001/tasks:
+4. You are now ready to do the complete authorization flow.
 
-    You will probably see nothing because the consumer was not authorized yet, so let's authorize it.
+* Access the home of the consumer app: http://localhost:8001/
+* You will be redirected to authenticate at **API app**, authenticate using the same credentials (`johndoe@example.com`/`password`)
+* This authorization page will be displayed, this represents the **consumer app** asking for permission to access the **api app** protected resource (tasks), answer "Authorize"
 
-9. Access http://localhost:8001/ and you will be redirected to authenticate and then authorize the **consumer app**:
+![Asking for authorization](./API/resources/images/asking_for_authorization.png?raw=true)
 
-![List of clients](./API/resources/images/asking_for_authorization.png?raw=true)
+5. You will be redirected to the tasks route of consumer http://localhost:8001/tasks and now will be able to see a list of the tasks :tada:
 
-10. Once authorized you will be redirected again to http://localhost:8001/tasks now with the **tasks retrieved from api**.
+This flow is the most complex of all, the next ones are simpler and involves fewer steps.
+
+### Resource owner password credentials flow
+
+1. Using the comsumer, try to access the **protected resource** (tasks) of API:
+
+        $ docker-compose exec consumer php artisan tasks:get --grant=password
+
+    You will probably get an `authorization error`, so let's create an OAuth client in API app and configure the consumer app.
+
+2. As shown before you can create OAuth clients in **API app** using the command line or web interface, let's create with command line
+
+        $ docker-compose exec api php artisan passport:client --password --no-interaction
+
+3. Now you must configure the `.env` file of **consumer app** with `client_id` and `client_secret` generated in the last step:
+
+        OAUTH_GRANT_PASSWORD_CLIENT_ID=
+        OAUTH_GRANT_PASSWORD_CLIENT_SECRET=
+
+4. With all configurations in place, now you can get the protected resource (tasks) from **API app** executing the same command of the first step:
+
+        $ docker-compose exec consumer php artisan tasks:get --grant=password
+
+### Client credentials flow
+
+Pretty much similar to the `Resource owner password credentials flow`, the steps are pratically the same.
+
+1. Using the comsumer, try to access the **protected resource** (tasks) of API:
+
+        $ docker-compose exec consumer php artisan tasks:get --grant=client_credentials
+
+    You will probably get an `authorization error`, so let's create an OAuth client in API app and configure the consumer app.
+
+2. Let's create the OAuth client:
+
+        $ docker-compose exec api php artisan passport:client --client --no-interaction
+
+3. Now you must configure the `.env` file of **consumer app** with `client_id` and `client_secret` generated in the last step:
+
+        OAUTH_GRANT_CLIENT_CREDENTIALS_CLIENT_ID=
+        OAUTH_GRANT_CLIENT_CREDENTIALS_CLIENT_SECRET=
+
+4. With all configurations in place, now you can get the protected resource (tasks) from **API app** executing the same command of the first step:
+
+        $ docker-compose exec consumer php artisan tasks:get --grant=client_credentials
+
+### Implicit flow
+
+TODO
 
 ## References
 
 * [Laravel Passport documentation](https://laravel.com/docs/master/passport)
+* [OAuth2 Flows](https://medium.com/@darutk/diagrams-and-movies-of-all-the-oauth-2-0-flows-194f3c3ade85)
 * [Tutorial about Passport](https://scotch.io/@neo/getting-started-with-laravel-passport)
 * [Tutorial about Passport](https://blog.pusher.com/make-an-oauth2-server-using-laravel-passport/)
