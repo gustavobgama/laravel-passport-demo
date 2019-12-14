@@ -39,6 +39,7 @@ Route::get('/callback', function (Request $request) {
 Route::get('/tasks', function () {
     $response = (new Client)->get(config('oauth.grant_authorization_code.api_url'), [
         'headers' => [
+            'Accept' => 'application/json',
             'Authorization' => 'Bearer '.session()->get('token')
         ]
     ]);
