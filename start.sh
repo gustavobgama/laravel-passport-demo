@@ -27,4 +27,4 @@ echo "===> Configuring storage permissions"
 chown -R www-data:www-data ./storage
 
 echo "===> Running the PHP server"
-php artisan serve --host=0.0.0.0 --port=$1 --ansi
+php -d variables_order=EGPCS -S 0.0.0.0:$1 -t ./public ./server.php
